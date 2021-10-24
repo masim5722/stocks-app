@@ -5,12 +5,12 @@ import csv
 
 # python manage.py runscript load
 
-from stocks.models import Stocks
+from stocks.models import Stock
 
 
 def run():
     print('Deleteing data from Stocks Table...')
-    Stocks.objects.all().delete()
+    Stock.objects.all().delete()
 
     print('opening 15.csv...')
     first_file = open('data/15.csv')
@@ -38,7 +38,7 @@ def run():
         low = row[4]
         close = row[5]
         date = row[10]
-        m = Stocks(symbol=symbol, high=high, low=low, close=close, date=date)
+        m = Stock(symbol=symbol, high=high, low=low, close=close, date=date)
         m.save()
 
     print('inserting data from 16.csv...')
@@ -48,7 +48,7 @@ def run():
         low = row[4]
         close = row[5]
         date = row[10]
-        m = Stocks(symbol=symbol, high=high, low=low, close=close, date=date)
+        m = Stock(symbol=symbol, high=high, low=low, close=close, date=date)
         m.save()
 
     print('inserting data from 17.csv...')
@@ -58,7 +58,7 @@ def run():
         low = row[4]
         close = row[5]
         date = row[10]
-        m = Stocks(symbol=symbol, high=high, low=low, close=close, date=date)
+        m = Stock(symbol=symbol, high=high, low=low, close=close, date=date)
         m.save()
 
     print('Data inserted successfully!')
