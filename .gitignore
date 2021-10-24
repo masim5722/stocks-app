@@ -1,0 +1,25 @@
+
+# BACKEND IGNORED FILES
+backend/.idea/*
+
+# FRONTEND IGNORED FILES
+# dependencies
+frontend/node_modules
+
+# builds
+frontend/build
+frontend/dist
+frontend/.rpt2_cache
+
+# misc
+frontend/.DS_Store
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/.idea/*
+
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
