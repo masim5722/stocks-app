@@ -1,7 +1,9 @@
-FROM node:15.13-alpine
-
+FROM node
 WORKDIR /frontend
-COPY . .
+COPY package.json .
 RUN npm install
-#EXPOSE 3000
-RUN npm run build
+COPY . .
+ENV REACT_APP_NAME=stocks
+EXPOSE 3000
+#RUN npm run build
+CMD["npm", "start"]
