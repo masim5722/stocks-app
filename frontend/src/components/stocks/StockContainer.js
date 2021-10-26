@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react"
 import StockView from "./Stock";
 import {getStocks} from "../../services/api";
 import {useDispatch} from "react-redux";
-import {toggleLoader} from "../redux/actions/loaderAction";
+import {toggleLoader} from "../../redux/actions/loaderAction";
 import dayjs from "dayjs";
 
 /**
