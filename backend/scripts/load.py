@@ -37,8 +37,9 @@ def run():
         high = row[3]
         low = row[4]
         close = row[5]
+        opens = row[2]
         date = row[10]
-        m = Stock(symbol=symbol, high=high, low=low, close=close, date=date)
+        m = Stock(symbol=symbol, high=high, low=low, close=close, open=opens, date=date)
         m.save()
 
     print('inserting data from 16.csv...')
@@ -47,8 +48,9 @@ def run():
         high = row[3]
         low = row[4]
         close = row[5]
+        opens = row[2]
         date = row[10]
-        m = Stock(symbol=symbol, high=high, low=low, close=close, date=date)
+        m = Stock(symbol=symbol, high=high, low=low, close=close, open=opens, date=date)
         m.save()
 
     print('inserting data from 17.csv...')
@@ -56,9 +58,10 @@ def run():
         symbol = row[0]
         high = row[3]
         low = row[4]
+        opens = row[2]
         close = row[5]
         date = row[10]
-        m = Stock(symbol=symbol, high=high, low=low, close=close, date=date)
+        m = Stock(symbol=symbol, high=high, low=low, close=close, open=opens, date=date)
         m.save()
 
     print('Data inserted successfully!')

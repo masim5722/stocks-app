@@ -8,8 +8,9 @@ class Stock(models.Model):
     date = models.DateField()
     high = models.FloatField()
     low = models.FloatField()
+    open = models.FloatField(default=0)
     close = models.FloatField()
 
 
 class StockAdmin(admin.ModelAdmin):
-    list_display = ('symbol', 'high', 'low', 'close', 'date')
+    list_display = ('symbol', 'high', 'low', 'open', 'close', 'date')

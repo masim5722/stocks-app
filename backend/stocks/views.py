@@ -1,14 +1,13 @@
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
-from rest_framework.decorators import api_view
-from rest_framework.parsers import JSONParser
+from rest_framework.generics import ListAPIView
 from .models import Stock
 from .serializers import StockSerializer
+from django_filters import rest_framework as filters
+from rest_framework.filters import OrderingFilter, SearchFilter
 
 
-@api_view(['GET'])
-def stock_list(request):
-    if request.method == 'GET':
-        stocks = Stock.objects.order_by('close').all()
-        serializer = StockSerializer(stocks, many=True)
-        return JsonResponse(serializer.data, safe=False)
+class StockList(ListAPIView):
+    serializer_class = StockSerializer
+    queryset = Stock.objects.all()
+    filter_backends = (filters.DjangoFilterBackend, OrderingFilter)
+    filterset_fields = ('symbol', 'date')
+    ordering_fields = ('close', 'open', 'high', 'low')

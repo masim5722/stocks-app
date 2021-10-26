@@ -5,4 +5,4 @@ from .models import Stock
 class StockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stock
-        fields = ['symbol', 'high', 'low', 'close', 'date']
+        fields = ['symbol', 'high', 'low', 'open', 'close', 'date']
