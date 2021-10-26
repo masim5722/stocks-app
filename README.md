@@ -13,7 +13,6 @@ Following sub tasks are completed in this
 8. Implmented functionality to sort the data
 9. Implemented Custom Pagination as the data was big to handle for the chart
 10. Integrated Apex Charts
-11. Dockerize, both Frontend and Backend app for deployment
 
 # Project Directory Structure
 	├───frontend #ReactJs application
@@ -32,7 +31,6 @@ Following sub tasks are completed in this
 		    ├───data # data folder contains sample csv data
 		    ├───scripts # scripts folder contains load script to insert the sample data in to the database
 		    └───stocks # django application for API of stocks
-    ├───nginx # nginx configrations folder for docker
     
 
 # Pre-requisites for local setup
