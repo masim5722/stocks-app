@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react"
 import StockView from "./Stock";
-import {getStocks} from "../../services/api";
+import {getStocks, getSymbols} from "../../services/api";
 import {useDispatch} from "react-redux";
 import {toggleLoader} from "../../redux/actions/loaderAction";
 import dayjs from "dayjs";
@@ -17,9 +17,11 @@ const Stock = () =>{
 
     let [stocks, setStocks] = useState([])
     let [symbol, setSymbol] = useState("")
+    let [stockSymbols, setStockSymbols] = useState([])
     let [date, setDate] = useState("2021-06-15")
-    let [sorting, setSorting] = useState("Close Ascending") // default sorting by close descending
+    let [sorting, setSorting] = useState("---------") // default sorting by close descending
     let [sortingOptions, setSortingOptions] = useState([
+        '---------',
         'Open Ascending',
         'Open Descending',
         'Close Ascending',
@@ -60,7 +62,7 @@ const Stock = () =>{
             case 'Low Descending':
                 return '-low'
             default:
-                return '-close'
+                return ''
         }
     }
     /**
@@ -68,8 +70,8 @@ const Stock = () =>{
      * on the basis of filtering and sorting
      * @returns {string}
      */
-    const createUrl = () =>{
-        let apiBaseUrl = 'http://127.0.0.1:8000/api/stocks/?ordering='+refineSorting()
+    const createStockListUrl = () =>{
+        let apiBaseUrl = 'http://127.0.0.1:8000/api/stocks/list/?ordering='+refineSorting()
         const nextPage = Number(pagination.page) + Number(1)
         if(date){
             apiBaseUrl = apiBaseUrl+'&date='+date
@@ -88,7 +90,7 @@ const Stock = () =>{
         // showing loader
         dispatch(toggleLoader({isLoading: true}))
         // api call
-        const url = createUrl()
+        const url = createStockListUrl()
         getStocks(url).then((response) =>{
             // response && setStocks(response)
            if(response){
@@ -108,16 +110,30 @@ const Stock = () =>{
                }
            }
         })
-            .catch((error) =>{
-                console.log(error)
-            })
+        .catch((error) =>{
+            // hiding loader
+            dispatch(toggleLoader({isLoading: false}))
+            console.log(error)
+        })
     }
 
     /**
-     * function to call api by applying filters
+     * Function to fetch stocks data
      */
-    const handleFilter = () =>{
-        fetchStocksData()
+    const fetchStockSymbol = (symbolValue) =>{
+        // showing loader
+        dispatch(toggleLoader({isLoading: true}))
+        // api call
+        const url = "http://127.0.0.1:8000/api/stocks/symbols/?search="+symbolValue
+        getSymbols(url).then((response) =>{
+            response && setStockSymbols(response)
+            dispatch(toggleLoader({isLoading: false}))
+        })
+        .catch((error) =>{
+            console.log(error)
+            // hiding loader
+            dispatch(toggleLoader({isLoading: false}))
+        })
     }
 
     /**
@@ -138,15 +154,29 @@ const Stock = () =>{
         setPage(0)
     };
 
+    /**
+     * Handle autocomplete symbol
+     * @param event
+     */
+    const handleAutoCompleteSymbol = (symbolValue) => {
+        symbolValue && fetchStockSymbol(symbolValue)
+    };
+
     // calling API on component mount
     useEffect(()=>{
+        // calling api to fetch stocks list
         fetchStocksData()
     },[])
 
     // this will call when sorting value is changed
     useEffect(() =>{
         fetchStocksData()
-    }, [sorting])
+    }, [sorting, date])
+
+    // this will call when sorting value is changed
+    useEffect(() =>{
+        symbol && symbol!== '' && fetchStocksData()
+    }, [symbol])
 
     // this will call when page value is changed
     useEffect(() =>{
@@ -220,10 +250,11 @@ const Stock = () =>{
         series={series}
         formData={formData}
         setFormData={setFormData}
-        handleFilter={handleFilter}
         pagination={pagination}
         handleChangePage={handleChangePage}
         handleChangeRowsPerPage={handleChangeRowsPerPage}
+        stockSymbols={stockSymbols}
+        handleAutoCompleteSymbol={handleAutoCompleteSymbol}
     />
 }
 

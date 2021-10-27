@@ -1,5 +1,6 @@
 import React from "react"
 import {
+    Box,
     Button,
     Divider,
     FormControl,
@@ -16,6 +17,7 @@ import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import dayjs from "dayjs";
+import {Autocomplete, createFilterOptions} from "@mui/material";
 
 const StockView = (props) => {
     let classes = useStyles()
@@ -25,11 +27,16 @@ const StockView = (props) => {
         series,
         formData,
         setFormData,
-        handleFilter,
         pagination,
         handleChangePage,
-        handleChangeRowsPerPage
+        handleChangeRowsPerPage,
+        stockSymbols,
+        handleAutoCompleteSymbol
     } = props
+
+    const filterOptions = createFilterOptions({
+        limit: 10,
+    });
     return (
         <Grid container>
             <Grid lg={12}>
@@ -41,16 +48,27 @@ const StockView = (props) => {
 
             <Grid lg={6} className={classes.mbt2}>
                 <FormControl className={classes.mr2}>
-                    <TextField
-                        id="filled-basic"
-                        value={formData.symbol}
-                        label="Symbol"
-                        InputLabelProps={{
-                            shrink: true,
+                    <Autocomplete
+                        filterOptions={filterOptions}
+                        id="symbol"
+                        sx={{ width: 300 }}
+                        options={stockSymbols}
+                        autoComplete
+                        getOptionLabel={(option) => option.symbol}
+                        renderOption={(props, option) => (
+                            <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                                {option.symbol}
+                            </Box>
+                        )}
+                        onChange={(event, newValue)=> newValue && newValue.symbol && setFormData.setSymbol(newValue.symbol)}
+                        onInputChange={(event, newInputValue) => {
+                            handleAutoCompleteSymbol(newInputValue)
                         }}
-                        onChange={(e) => {setFormData.setSymbol(e.target.value)}}
-                        variant="standard"
+                        renderInput={(params) => (
+                            <TextField {...params} label="Search Symbol" fullWidth autoComplete={false}/>
+                        )}
                     />
+
                 </FormControl>
 
                 <FormControl className={classes.mr2}>
@@ -64,13 +82,9 @@ const StockView = (props) => {
                         />
                     </LocalizationProvider>
                 </FormControl>
-
-                <FormControl>
-                    <Button variant="contained" className={classes.filterButton}  size="large" onClick={handleFilter}>Filter</Button>
-                </FormControl>
             </Grid>
             <Grid lg={6} className={[classes.mbt2, classes.textAlignRight]}>
-                <FormControl>
+                <FormControl className={classes.sortField}>
                     <InputLabel id="sorting-label">Sort By</InputLabel>
                     <Select
                         labelId="sorting-label"

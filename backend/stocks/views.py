@@ -1,7 +1,7 @@
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
 from .models import Stock
-from .serializers import StockSerializer
+from .serializers import StockSerializer, StockSymbolsSerializer
 from django_filters import rest_framework as filters
 from rest_framework.filters import OrderingFilter, SearchFilter
 
@@ -19,5 +19,11 @@ class StockList(ListAPIView):
     ordering_fields = ('close', 'open', 'high', 'low')
     pagination_class = CustomPagination
 
+
+class StockSymbols(ListAPIView):
+    serializer_class = StockSymbolsSerializer
+    queryset = Stock.objects.all().values('symbol').distinct()
+    filter_backends = (filters.DjangoFilterBackend, SearchFilter)
+    search_fields = ['symbol']
 
 

@@ -24,5 +24,9 @@ export default makeStyles((theme) => ({
         '&:hover' :{
             backgroundColor: '#1e76b9 !important',
         }
+    },
+    sortField:{
+        minWidth: '150px',
+        textAlign: 'left'
     }
 }))
